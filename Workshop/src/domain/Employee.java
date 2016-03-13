@@ -1,9 +1,17 @@
 package domain;
 
+import java.util.ArrayList;
+
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 @Entity
 public class Employee extends Person {
@@ -29,14 +37,39 @@ public class Employee extends Person {
 	public void addEmployee() {
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDataBase");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		System.out.println(this.getFirstName());
+
 		entityManager.getTransaction().begin();
 		entityManager.persist(this);
 		entityManager.getTransaction().commit();
+
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 
 	public void deleteEmployee() {
 
 	}
 
+	public List<Employee> showListEmployees() {
+
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDataBase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		List<Employee> employees = new ArrayList<>();
+
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Object> criteriaQuery = criteriaBuilder.createQuery();
+		Root<Employee> from = criteriaQuery.from(Employee.class);
+
+		CriteriaQuery<Object> select = criteriaQuery.select(from);
+		TypedQuery<Object> typedQuery = entityManager.createQuery(select);
+		List<Object> resultList = typedQuery.getResultList();
+
+		for (Object o : resultList) {
+			employees.add((Employee) o);
+			System.out.println(((Employee) o).getFirstName() + ((Employee) o).getLastName());
+		}
+		entityManager.close();
+		entityManagerFactory.close();
+		return employees;
+	}
 }
