@@ -23,6 +23,7 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 	private JTextField specializationTextField;
 	private JTextField salaryTextField;
 	private JTable employeesTable;
+	private JScrollPane scrollPane;
 
 	private Employee employee;
 	private List<Employee> employees;
@@ -88,21 +89,22 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 		deleteEmployeeButton.setBounds(313, 195, 162, 25);
 		add(deleteEmployeeButton);
 
-		JButton btnUpdateData = new JButton("Update Data");
-		btnUpdateData.setBounds(559, 195, 155, 25);
-		add(btnUpdateData);
+		JButton updateDataButton = new JButton("Update Data");
+		updateDataButton.setBounds(559, 195, 155, 25);
+		add(updateDataButton);
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(63, 270, 689, 216);
-		add(scrollPane);
 
-		employeesTable = new JTable();
-		scrollPane.setViewportView(employeesTable);
+		add(scrollPane);
+		employee = new Employee();
+		refreshData();
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		employee = new Employee();
+
 		employee.setFirstName(firstNameTextField.getText());
 		employee.setLastName(lastNameTextField.getText());
 		employee.setPhoneNumber(phoneNumberTextField.getText());
@@ -110,65 +112,15 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 		employee.setSalary(Double.parseDouble(salaryTextField.getText()));
 
 		employee.addEmployee();
-		employees = employee.showListEmployees();
-		
-		TableModel model = new TableModel() {
-			
-			@Override
-			public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void removeTableModelListener(TableModelListener l) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public boolean isCellEditable(int rowIndex, int columnIndex) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public Object getValueAt(int rowIndex, int columnIndex) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public int getRowCount() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public String getColumnName(int columnIndex) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public int getColumnCount() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public Class<?> getColumnClass(int columnIndex) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-			@Override
-			public void addTableModelListener(TableModelListener l) {
-				// TODO Auto-generated method stub
-				
-			}
-		};
-		employeesTable.setModel(model);
+
+		refreshData();
+	}
+
+	public void refreshData() {
+		employees = employee.getEmployees();
+		TableModel model = new EmployeeTableModel(employees);
+		employeesTable = new JTable(model);
+		scrollPane.setViewportView(employeesTable);
 	}
 
 }

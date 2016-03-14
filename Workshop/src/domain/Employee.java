@@ -50,7 +50,7 @@ public class Employee extends Person {
 
 	}
 
-	public List<Employee> showListEmployees() {
+	public List<Employee> getEmployees() {
 
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDataBase");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -66,7 +66,6 @@ public class Employee extends Person {
 
 		for (Object o : resultList) {
 			employees.add((Employee) o);
-			System.out.println(((Employee) o).getFirstName() + ((Employee) o).getLastName());
 		}
 		entityManager.close();
 		entityManagerFactory.close();
