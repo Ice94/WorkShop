@@ -112,7 +112,7 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 		employee.setSalary(Double.parseDouble(salaryTextField.getText()));
 
 		employee.addEmployee();
-
+		employee.deleteEmployee(8L);
 		refreshData();
 	}
 
