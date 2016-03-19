@@ -15,6 +15,8 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class EmpolyeePanel extends JPanel implements ActionListener {
 	private JTextField firstNameTextField;
@@ -24,6 +26,9 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 	private JTextField salaryTextField;
 	private JTable employeesTable;
 	private JScrollPane scrollPane;
+	private JButton addEmployeeButton;
+	private JButton deleteEmployeeButton;
+	private JButton updateDataButton;
 
 	private Employee employee;
 	private List<Employee> employees;
@@ -80,17 +85,19 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 		add(salaryTextField);
 		salaryTextField.setColumns(10);
 
-		JButton addEmployeeButton = new JButton("Add Employee");
+		addEmployeeButton = new JButton("Add Employee");
 		addEmployeeButton.setBounds(84, 195, 145, 25);
 		addEmployeeButton.addActionListener(this);
 		add(addEmployeeButton);
 
-		JButton deleteEmployeeButton = new JButton("Delete Employee");
+		deleteEmployeeButton = new JButton("Delete Employee");
 		deleteEmployeeButton.setBounds(313, 195, 162, 25);
+		deleteEmployeeButton.addActionListener(this);
 		add(deleteEmployeeButton);
 
-		JButton updateDataButton = new JButton("Update Data");
+		updateDataButton = new JButton("Update Data");
 		updateDataButton.setBounds(559, 195, 155, 25);
+		updateDataButton.addActionListener(this);
 		add(updateDataButton);
 
 		scrollPane = new JScrollPane();
@@ -105,14 +112,24 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		employee.setFirstName(firstNameTextField.getText());
-		employee.setLastName(lastNameTextField.getText());
-		employee.setPhoneNumber(phoneNumberTextField.getText());
-		employee.setSpecialization(specializationTextField.getText());
-		employee.setSalary(Double.parseDouble(salaryTextField.getText()));
+		JButton button = (JButton) e.getSource();
 
-		employee.addEmployee();
-		employee.deleteEmployee(8L);
+		if (button == addEmployeeButton) {
+			setEmpolyeeData();
+			employee.addEmployee();
+		}
+		if (button == deleteEmployeeButton) {
+			long id = (long) employeesTable.getValueAt(employeesTable.getSelectedRow(),
+					employeesTable.getSelectedColumn());
+			employee.deleteEmployee(id);
+		}
+		if (button == updateDataButton) {
+			long id = (long) employeesTable.getValueAt(employeesTable.getSelectedRow(),
+					employeesTable.getSelectedColumn());
+			setEmpolyeeData();
+			employee.updateData(employee,id);
+		}
+
 		refreshData();
 	}
 
@@ -120,7 +137,26 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 		employees = employee.getEmployees();
 		TableModel model = new EmployeeTableModel(employees);
 		employeesTable = new JTable(model);
+		employeesTable.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				setTextField();
+			}
+		});
 		scrollPane.setViewportView(employeesTable);
 	}
-
+	public void setTextField(){
+		firstNameTextField.setText((String) employeesTable.getValueAt(employeesTable.getSelectedRow(), 1));
+		lastNameTextField.setText((String) employeesTable.getValueAt(employeesTable.getSelectedRow(), 2));
+		phoneNumberTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 3).toString());
+		salaryTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 4).toString()); 
+		specializationTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 5).toString());
+	}
+	public void setEmpolyeeData(){
+		employee.setFirstName(firstNameTextField.getText());
+		employee.setLastName(lastNameTextField.getText());
+		employee.setPhoneNumber(phoneNumberTextField.getText());
+		employee.setSpecialization(specializationTextField.getText());
+		employee.setSalary(Double.parseDouble(salaryTextField.getText()));
+	}
 }

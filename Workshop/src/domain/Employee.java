@@ -13,7 +13,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 
 @Entity
@@ -69,7 +68,7 @@ public class Employee extends Person {
 		entityManagerFactory.close();
 	}
 
-	public void updateData(Employee employee) {
+	public void updateData(Employee employee,long id) {
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDataBase");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		
@@ -84,7 +83,7 @@ public class Employee extends Person {
 		update.set("salary", employee.getSalary());
 		update.set("specialization", employee.getSpecialization());
 		
-		update.where(criteriaBuilder.equal(e.get("id"), employee.getId()));
+		update.where(criteriaBuilder.equal(e.get("id"), id));
 		
 		entityManager.getTransaction().begin();
 		entityManager.createQuery(update).executeUpdate();
