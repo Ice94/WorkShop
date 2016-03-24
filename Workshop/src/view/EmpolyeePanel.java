@@ -146,8 +146,8 @@ public class EmpolyeePanel extends JPanel implements ActionListener {
 		scrollPane.setViewportView(employeesTable);
 	}
 	public void setTextField(){
-		firstNameTextField.setText((String) employeesTable.getValueAt(employeesTable.getSelectedRow(), 1));
-		lastNameTextField.setText((String) employeesTable.getValueAt(employeesTable.getSelectedRow(), 2));
+		firstNameTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 1).toString());
+		lastNameTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 2).toString());
 		phoneNumberTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 3).toString());
 		salaryTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 4).toString()); 
 		specializationTextField.setText(employeesTable.getValueAt(employeesTable.getSelectedRow(), 5).toString());

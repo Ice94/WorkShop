@@ -47,5 +47,8 @@ public class MainView {
 		
 		EmpolyeePanel empolyeePanel = new EmpolyeePanel();
 		tabbedPane.add("Employee", empolyeePanel);
+		
+		CustomerPanel customerPanel = new CustomerPanel();
+		tabbedPane.add("Customer", customerPanel);
 	}
 }

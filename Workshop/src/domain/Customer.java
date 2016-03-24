@@ -4,8 +4,12 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 public class Customer extends Person {
@@ -31,6 +35,16 @@ public class Customer extends Person {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
-	
+	public void addCustomer(Customer customer){
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDataBase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		
+		
+		
+		entityManager.close();
+		entityManagerFactory.close();
+	}
 
 }
